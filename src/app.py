@@ -9,10 +9,11 @@ from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
 from models import db, User
+from routes import api 
 #from models import Person
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
+app.url_map.strict_slashes = False 
 
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
@@ -25,6 +26,10 @@ MIGRATE = Migrate(app, db)
 db.init_app(app)
 CORS(app)
 setup_admin(app)
+
+
+app.register_blueprint(api, url_prefix='/api')
+
 
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
